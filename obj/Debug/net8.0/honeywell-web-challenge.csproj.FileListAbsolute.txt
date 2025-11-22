@@ -30,3 +30,4 @@
 /Users/souravm/honeywell-web-challenge/obj/Debug/net8.0/honeywell-web-challenge.pdb
 /Users/souravm/honeywell-web-challenge/obj/Debug/net8.0/honeywell-web-challenge.genruntimeconfig.cache
 /Users/souravm/honeywell-web-challenge/obj/Debug/net8.0/ref/honeywell-web-challenge.dll
+/Users/souravm/honeywell-web-challenge/obj/Debug/net8.0/honeywell-web-challenge.sourcelink.json

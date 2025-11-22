@@ -1,1 +1,123 @@
-﻿
+﻿@model honeywell_web_challenge.Models.HomeViewModel
+@{
+    ViewData["Title"] = "Video Catalogue";
+}
+
+<div id="pageRoot" class="container py-4" data-active-view="@Model.ActiveView">
+    <div class="row mb-3">
+        <div class="col-12 d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div>
+                <h1 class="h3 mb-0">Video Catalogue</h1>
+                <p class="text-muted mb-0">Upload and play MP4 videos from the server media folder.</p>
+            </div>
+            <div class="btn-group" role="group" aria-label="View toggle">
+                <button id="btnShowUpload" type="button" class="btn btn-outline-primary">
+                    Upload video(s)
+                </button>
+                <button id="btnShowCatalogue" type="button" class="btn btn-primary">
+                    View catalogue
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="row">
+        <div class="col-12">
+            <div id="globalMessage" class="alert d-none" role="alert"></div>
+        </div>
+    </div>
+
+    <div class="row gy-3">
+        <!-- Left: upload or catalogue -->
+        <div class="col-12 col-lg-6">
+            <!-- Upload view -->
+            <div id="uploadView" class="card shadow-sm mb-3 d-none">
+                <div class="card-header">
+                    <h2 class="h5 mb-0">Upload MP4 video files</h2>
+                </div>
+                <div class="card-body">
+                    <form id="uploadForm" novalidate>
+                        <div class="mb-3">
+                            <label for="fileInput" class="form-label">Select one or more MP4 files</label>
+                            <input class="form-control" type="file" id="fileInput" name="files"
+                                   multiple accept="video/mp4">
+                            <div class="form-text">
+                                Only <strong>.mp4</strong> files are allowed. Maximum size per upload: 200 MB.
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success" id="btnUpload">
+                            Upload
+                        </button>
+
+                        <span id="uploadSpinner" class="spinner-border spinner-border-sm text-success ms-2 d-none"
+                              role="status" aria-hidden="true"></span>
+
+                        <div id="uploadMessage" class="mt-2 small text-danger"></div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Catalogue view -->
+            <div id="catalogueView" class="card shadow-sm mb-3">
+                <div class="card-header">
+                    <h2 class="h5 mb-0">Available videos</h2>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.MediaFiles.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0 align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col">File name</th>
+                                        <th scope="col" class="text-end">Size (MB)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var file in Model.MediaFiles)
+                                {
+                                    <tr class="video-row" data-url="@file.Url">
+                                        <td>@file.FileName</td>
+                                        <td class="text-end">@file.SizeInMb</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="px-3 py-2 small text-muted">
+                            Click a row to start playback.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-3">
+                            <p class="mb-0 text-muted">No videos found in the media folder yet. Try uploading some MP4 files.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: video player -->
+        <div class="col-12 col-lg-6">
+            <div class="card shadow-sm video-card">
+                <div class="card-header">
+                    <h2 class="h5 mb-0">Video player</h2>
+                </div>
+                <div class="card-body">
+                    <div class="video-wrapper">
+                        <video id="videoPlayer" class="w-100" controls preload="metadata">
+                            <source id="videoSource" src="" type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <p id="currentVideoLabel" class="mt-2 small text-muted mb-0">
+                        No video selected.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

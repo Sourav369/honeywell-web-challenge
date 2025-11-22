@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("honeywell-web-challenge")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+62b3ad4a7525fedd905435a0ed60408124a5e4f2")]
 [assembly: System.Reflection.AssemblyProductAttribute("honeywell-web-challenge")]
 [assembly: System.Reflection.AssemblyTitleAttribute("honeywell-web-challenge")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
