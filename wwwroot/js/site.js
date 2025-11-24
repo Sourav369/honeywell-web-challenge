@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const videoSource = document.getElementById("videoSource");
   const currentVideoLabel = document.getElementById("currentVideoLabel");
   const videoRows = document.querySelectorAll(".video-row");
+  const playerColumn = document.getElementById("playerColumn"); // used to hide/show player
 
   const ACTIVE_CLASS = "btn-primary";
   const INACTIVE_CLASS = "btn-outline-primary";
@@ -32,6 +33,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (view === "upload") {
       uploadView.classList.remove("d-none");
       catalogueView.classList.add("d-none");
+
+      // hide video player while in upload mode
+      if (playerColumn) {
+        playerColumn.classList.add("d-none");
+      }
+
       btnShowUpload.classList.add(ACTIVE_CLASS);
       btnShowUpload.classList.remove(INACTIVE_CLASS);
       btnShowCatalogue.classList.add(INACTIVE_CLASS);
@@ -40,6 +47,12 @@ document.addEventListener("DOMContentLoaded", () => {
       // catalogue
       catalogueView.classList.remove("d-none");
       uploadView.classList.add("d-none");
+
+      // show video player in catalogue mode
+      if (playerColumn) {
+        playerColumn.classList.remove("d-none");
+      }
+
       btnShowCatalogue.classList.add(ACTIVE_CLASS);
       btnShowCatalogue.classList.remove(INACTIVE_CLASS);
       btnShowUpload.classList.add(INACTIVE_CLASS);

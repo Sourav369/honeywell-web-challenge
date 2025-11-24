@@ -8,7 +8,9 @@ namespace honeywell_web_challenge.Controllers
     public class UploadController : ControllerBase
     {
         private readonly IMediaService _mediaService;
-        private const long MaxUploadBytes = 200L * 1024L * 1024L; // 200 MB
+
+        // 200 MB max upload size (for the request)
+        private const long MaxUploadBytes = 200L * 1024L * 1024L;
 
         public UploadController(IMediaService mediaService)
         {
@@ -16,8 +18,10 @@ namespace honeywell_web_challenge.Controllers
         }
 
         // POST: /api/upload
+        // Allow multipart/form-data bodies up to 200 MB for THIS endpoint only
         [HttpPost]
         [RequestSizeLimit(MaxUploadBytes)]
+        [RequestFormLimits(MultipartBodyLengthLimit = MaxUploadBytes)]
         public async Task<IActionResult> Upload([FromForm] List<IFormFile> files)
         {
             if (files == null || files.Count == 0)
@@ -25,12 +29,13 @@ namespace honeywell_web_challenge.Controllers
                 return BadRequest(new { message = "No files were provided for upload." });
             }
 
-            // Optional extra check for size per file (on top of RequestSizeLimit)
-            if (files.Any(f => f.Length > MaxUploadBytes))
+            // Total request size check (as per requirements)
+            long totalSize = files.Sum(f => f.Length);
+            if (totalSize > MaxUploadBytes)
             {
                 // 413 – Payload Too Large
                 return StatusCode(StatusCodes.Status413PayloadTooLarge,
-                    new { message = "One or more files exceed the maximum size of 200MB." });
+                    new { message = "Total upload size must be 200 MB or less." });
             }
 
             try
@@ -40,13 +45,12 @@ namespace honeywell_web_challenge.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                // e.g. non-MP4 extension
+                // e.g. non-MP4 extension from the service
                 return BadRequest(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                // Log and hide internal details from user
-                // In a real-world app you'd log via ILogger<UploadController>
+                // Log the exception in a real app
                 Console.WriteLine(ex);
 
                 return StatusCode(StatusCodes.Status500InternalServerError,
